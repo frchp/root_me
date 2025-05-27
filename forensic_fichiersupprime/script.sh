@@ -1,0 +1,1 @@
+sudo strings usb.image | less
