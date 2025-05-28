@@ -8,14 +8,16 @@ duration_re = re.compile(r"Durée jusqu'au log suivant : ([\d\.]+) secondes")
 
 def bits_value(duration):
     # Pour les cas 2 bits
-    if duration == 2.0:
+    if duration == 0.0:
+        return '00'
+    elif duration == 2.0:
         return '01'
     elif duration == 4.0:
         return '10'
     elif duration == 6.0:
         return '11'
     else:
-        return '00'
+        return ''
 
 def bit7_value(duration):
     # Pour le bit 7, 1 bit seul, mapping basé sur les durées fournies
@@ -24,7 +26,7 @@ def bit7_value(duration):
     elif duration == 4.0:
         return '1'
     else:
-        return '0'  # par défaut
+        return ''
 
 with open(filename, "r") as f:
     content = f.read()
@@ -51,7 +53,7 @@ for block in blocks:
     is_concat = "concat(" in block
 
     if char_num is not None and bit_num is not None and duration is not None:
-        if bit_num == 7 and not is_concat:
+        if bit_num == 7:
             bits = bit7_value(duration)
             print(f"Caractère extrait : {char_num}")
             print(f"Bit extrait (bit 7 spécial) : {bit_num}")
@@ -66,14 +68,14 @@ for block in blocks:
             print(f"Bits déduits de la durée : {bits}")
             print("-"*40)
 
+    # array_bits.append(bits[::-1])
     array_bits.append(bits)
 
-print(array_bits)
 str_array = ""
 for i in range(len(array_bits)):
   str_array += array_bits[i]
   if((i + 1) % 4 == 0):
-    str_array = str_array[::-1]
-    print(str_array)
+    # str_array = str_array[::-1]
+    print(str_array, chr(int(str_array, 2)))
     str_array = ""
-    print(" ")
+# print(array_bits)
